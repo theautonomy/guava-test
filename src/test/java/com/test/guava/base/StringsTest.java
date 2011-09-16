@@ -11,10 +11,8 @@ public class StringsTest {
 	public void testIsNullOrEmpty() {
 		String temp = "";
 		assertTrue(isNullOrEmpty(temp));
-		
 		temp = null;
 		assertTrue(isNullOrEmpty(temp));
-		
 		temp = " ";
 		assertFalse(isNullOrEmpty(temp));
 	}
@@ -23,7 +21,6 @@ public class StringsTest {
 	public void testEmptyToNull() {
 		String temp = "";
 		assertNull(emptyToNull(temp));
-		
 		temp = "  ";
 		assertNotNull(emptyToNull(temp));
 	}
@@ -35,5 +32,30 @@ public class StringsTest {
 		assertSame("", nullToEmpty(temp));
 		assertNotSame(" ", nullToEmpty(temp)); 
 	}
-
+	
+	@Test
+	public void testPadEnd() {
+		String temp = "aaa";
+		assertEquals("aaabb", padEnd(temp, 5, 'b'));
+		assertEquals("aaa", padEnd(temp, 3, 'b'));
+		assertEquals("aaa", padEnd(temp, 2, 'b'));
+	}
+	
+	@Test
+	public void testPadStart() {
+		String temp = "aaa";
+		assertEquals("bbaaa", padStart(temp, 5, 'b'));
+		assertEquals("aaa", padStart(temp, 3, 'b'));
+		assertEquals("aaa", padStart(temp, 2, 'b'));
+	
+		temp = "12345678";
+		assertEquals("012345678", padStart(temp, 9, '0'));
+	}
+	
+	@Test
+	public void testRepeat() {
+		String temp = "abc";
+		assertEquals("abcabc", repeat(temp, 2));
+	}
+	
 }
