@@ -6,6 +6,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.common.base.Function;
 import com.google.common.base.Objects.ToStringHelper;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -13,6 +14,7 @@ import com.google.common.collect.Iterables;
 import  static com.google.common.base.Preconditions.*;
 import  static com.google.common.base.Objects.*;
 import static org.junit.Assert.*;
+import static com.google.common.collect.Iterables.*;
 
 import static org.hamcrest.core.Is.*;
 
@@ -43,12 +45,17 @@ public class PredicatesTest {
 		assertThat(people[1].getName(), is("test2"));
 		assertThat(people[0].getAge(), is(12));
 		assertThat(people[1].getAge(), is(10));
+	
+		Iterable<Integer> ages = transform(c, new GetAgeFunction()); 
+		for (Integer i : ages) {
+			ToStringHelper tsh = toStringHelper(i).add("value",  i.intValue());
+			System.out.println(tsh.toString());
+		}
 		
 		Person p = Iterables.find(aList, new AgeGreaterThan10Predicate(), null); 
 		ToStringHelper tsh = toStringHelper(p).add("name", p.getName()).add("age", p.getAge());
 		System.out.println(tsh.toString());
 		assertThat(p.getName(), is("test1"));
-		
 	}
 }
 
@@ -57,6 +64,14 @@ class AgeGreaterThan10Predicate implements Predicate<Person> {
 	public boolean apply(Person person) {
 		checkNotNull(person);
 		return person.getAge() >= 10;
+	}
+}
+
+class GetAgeFunction implements Function<Person, Integer> {
+	@Override
+	public Integer apply(Person person) {
+		checkNotNull(person);
+		return new Integer(person.getAge());
 	}
 }
 
