@@ -32,7 +32,30 @@ public class PredicatesTest {
 	}
 	
 	@Test
-	public void applyPredicate() {
+	public void transformUsingFunction() {
+		Iterable<Integer> ages = transform(aList, new GetAgeFunction()); 
+		for (Integer i : ages) {
+			ToStringHelper tsh = toStringHelper(i).add("value",  i.intValue());
+			System.out.println(tsh.toString());
+		}
+		
+		Integer  [] agesArray = Iterables.toArray(ages, Integer.class);
+		
+		assertThat(agesArray[0].intValue(), is (12));
+		assertThat(agesArray[1].intValue(), is (10));
+		assertThat(agesArray[2].intValue(), is (9));
+	}
+	
+	@Test
+	public void findUsingPredicate() {
+		Person p = Iterables.find(aList, new AgeGreaterThan10Predicate(), null); 
+		ToStringHelper tsh = toStringHelper(p).add("name", p.getName()).add("age", p.getAge());
+		System.out.println(tsh.toString());
+		assertThat(p.getName(), is("test1"));
+	}
+	
+	@Test
+	public void filterUsingPredicate() {
 		Iterable<Person> c = Iterables.filter(aList, new AgeGreaterThan10Predicate());
 		Person [] people = Iterables.toArray(c, Person.class);
 		
@@ -45,20 +68,21 @@ public class PredicatesTest {
 		assertThat(people[1].getName(), is("test2"));
 		assertThat(people[0].getAge(), is(12));
 		assertThat(people[1].getAge(), is(10));
-	
-		Iterable<Integer> ages = transform(c, new GetAgeFunction()); 
-		for (Integer i : ages) {
-			ToStringHelper tsh = toStringHelper(i).add("value",  i.intValue());
-			System.out.println(tsh.toString());
-		}
-		
-		Person p = Iterables.find(aList, new AgeGreaterThan10Predicate(), null); 
-		ToStringHelper tsh = toStringHelper(p).add("name", p.getName()).add("age", p.getAge());
-		System.out.println(tsh.toString());
-		assertThat(p.getName(), is("test1"));
 	}
-}
+	
+	@Test 
+	public void predicateApply() {
+		boolean b = new AgeGreaterThan10Predicate().apply(new Person("test", 11));
+		assertThat (b, is(true));
+	}
 
+	@Test
+	public void functionApply() {
+		int i = new GetAgeFunction().apply(new Person("test", 10));
+		assertThat(i, is(10));
+	}
+
+}
 class AgeGreaterThan10Predicate implements Predicate<Person> {
 	@Override
 	public boolean apply(Person person) {
@@ -76,7 +100,6 @@ class GetAgeFunction implements Function<Person, Integer> {
 }
 
 class Person {
-	
 	private String name;
 	private int age;
 	
@@ -97,5 +120,4 @@ class Person {
 	public void setAge(int age) {
 		this.age = age;
 	}
-	
 }
