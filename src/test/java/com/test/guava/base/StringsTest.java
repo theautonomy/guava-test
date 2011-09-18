@@ -1,9 +1,12 @@
 package com.test.guava.base;
 
+
 import org.junit.Test;
-import static junit.framework.Assert.*;
+
+import static org.junit.Assert.*;
 
 import  static com.google.common.base.Strings.*;
+import static org.hamcrest.core.Is.*;
 
 public class StringsTest {
 	
@@ -39,6 +42,7 @@ public class StringsTest {
 		assertEquals("aaabb", padEnd(temp, 5, 'b'));
 		assertEquals("aaa", padEnd(temp, 3, 'b'));
 		assertEquals("aaa", padEnd(temp, 2, 'b'));
+		assertThat(padEnd(temp, 2, 'b'), is("aaa"));
 	}
 	
 	@Test
