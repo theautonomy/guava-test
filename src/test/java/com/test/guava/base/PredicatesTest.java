@@ -84,6 +84,7 @@ public class PredicatesTest {
 
 }
 class AgeGreaterThan10Predicate implements Predicate<Person> {
+    
 	@Override
 	public boolean apply(Person person) {
 		checkNotNull(person);
