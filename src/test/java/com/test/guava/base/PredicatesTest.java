@@ -41,7 +41,7 @@ public class PredicatesTest {
 		
 		Integer  [] agesArray = Iterables.toArray(ages, Integer.class);
 		
-		assertThat(agesArray[0].intValue(), is (12));
+		assertThat(agesArray[0].intValue(), is (1));
 		assertThat(agesArray[1].intValue(), is (10));
 		assertThat(agesArray[2].intValue(), is (9));
 	}
