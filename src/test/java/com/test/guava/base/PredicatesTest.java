@@ -19,8 +19,8 @@ import static com.google.common.collect.Iterables.*;
 import static org.hamcrest.core.Is.*;
 
 public class PredicatesTest {
-	List<Person> aList;
-	ToStringHelper tsh;
+    
+	private List<Person> aList;
 	
 	@Before
 	public void setup() {
@@ -28,29 +28,24 @@ public class PredicatesTest {
 		aList.add(new Person("test1", 12));
 		aList.add(new Person("test2", 10));
 		aList.add(new Person("test2", 9));
-		tsh = toStringHelper(Person.class);
 	}
 	
 	@Test
 	public void transformUsingFunction() {
 		Iterable<Integer> ages = transform(aList, new GetAgeFunction()); 
-		for (Integer i : ages) {
-			ToStringHelper tsh = toStringHelper(i).add("value",  i.intValue());
-			System.out.println(tsh.toString());
-		}
-		
 		Integer  [] agesArray = Iterables.toArray(ages, Integer.class);
 		
-		assertThat(agesArray[0].intValue(), is (1));
+		assertThat(agesArray[0].intValue(), is (12));
 		assertThat(agesArray[1].intValue(), is (10));
 		assertThat(agesArray[2].intValue(), is (9));
 	}
 	
+    // find the first one in the collection that satisfies the given predicate
 	@Test
 	public void findUsingPredicate() {
 		Person p = Iterables.find(aList, new AgeGreaterThan10Predicate(), null); 
 		ToStringHelper tsh = toStringHelper(p).add("name", p.getName()).add("age", p.getAge());
-		System.out.println(tsh.toString());
+        assertEquals("Person{name=test1, age=12}", tsh.toString());
 		assertThat(p.getName(), is("test1"));
 	}
 	
@@ -58,12 +53,7 @@ public class PredicatesTest {
 	public void filterUsingPredicate() {
 		Iterable<Person> c = Iterables.filter(aList, new AgeGreaterThan10Predicate());
 		Person [] people = Iterables.toArray(c, Person.class);
-		
-		for (Person p : people) {
-			ToStringHelper tsh = toStringHelper(p).add("name", p.getName()).add("age", p.getAge());
-			System.out.println(tsh.toString());
-		}
-		assertThat(people.length, is(2));
+	    assertThat(people.length, is(2));
 		assertThat(people[0].getName(), is("test1"));
 		assertThat(people[1].getName(), is("test2"));
 		assertThat(people[0].getAge(), is(12));
@@ -90,17 +80,21 @@ class AgeGreaterThan10Predicate implements Predicate<Person> {
 		checkNotNull(person);
 		return person.getAge() >= 10;
 	}
+    
 }
 
 class GetAgeFunction implements Function<Person, Integer> {
+    
 	@Override
 	public Integer apply(Person person) {
 		checkNotNull(person);
 		return new Integer(person.getAge());
 	}
+    
 }
 
 class Person {
+    
 	private String name;
 	private int age;
 	
@@ -112,13 +106,17 @@ class Person {
 	public String getName() {
 		return name;
 	}
+    
 	public void setName(String name) {
 		this.name = name;
 	}
+    
 	public int getAge() {
 		return age;
 	}
+    
 	public void setAge(int age) {
 		this.age = age;
 	}
+    
 }
