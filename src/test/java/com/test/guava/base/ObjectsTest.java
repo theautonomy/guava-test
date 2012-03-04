@@ -1,12 +1,15 @@
 package com.test.guava.base;
 
+import static com.google.common.base.Objects.equal;
+import static com.google.common.base.Objects.firstNonNull;
+import static com.google.common.base.Objects.toStringHelper;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.*;
+
 import org.junit.Test;
 
 import com.google.common.base.Objects;
-import com.sun.org.apache.bcel.internal.generic.NEW;
-
-import static junit.framework.Assert.*;
-import  static com.google.common.base.Objects.*;
+import com.google.common.base.Objects.ToStringHelper;
 
 public class ObjectsTest {
 	
@@ -29,27 +32,33 @@ public class ObjectsTest {
 	    temp.name = "you";
 	    temp.age  = 10;
 	    temp.salary = 16;
-	    
-	    System.out.println(Objects.hashCode(temp, temp));
-	    System.out.println(Objects.hashCode(temp));
-	    System.out.println(Objects.hashCode(temp.age, temp.name, temp.salary));
+	   
+        System.out.println(Objects.hashCode(temp));
+        System.out.println(Objects.hashCode(temp, temp));
+        System.out.println(Objects.hashCode(temp.age, temp.name, temp.salary));
+        
+	    assertEquals(86529409, Objects.hashCode(temp));
+	    assertEquals(1479099053, Objects.hashCode(temp, temp));
+	    assertEquals(3754426, Objects.hashCode(temp.age, temp.name, temp.salary));
 	}
 	
 	@Test
 	public void testToStringHelper() {
-			A temp = new A();
-	    temp.name = "you";
-	    temp.age  = 10;
+		A temp      = new A();
+        
+	    temp.name   = "you";
+	    temp.age    = 10;
 	    temp.salary = 16;
 	
 	    ToStringHelper ts = toStringHelper(temp);
-	    System.out.println(ts.toString());
-	    
+	    assertEquals("A{}", ts.toString()); 
+        
 	    ts = toStringHelper(temp)
 	         .add("name", temp.name)
 	         .add("age", temp.age)
 	         .add("salary", temp.salary);
-	    System.out.println(ts.toString());
+        
+	    assertEquals("A{name=you, age=10, salary=16}", ts.toString()); 
 	}
 	
 	@Test 
